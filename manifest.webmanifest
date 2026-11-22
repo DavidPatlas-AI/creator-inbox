@@ -1,11 +1,11 @@
 {
- "name": "Почта автора — демо",
- "short_name": "Почта",
+ "name": "תיבת התגובות — דמו",
+ "short_name": "תיבה",
  "start_url": "./",
  "display": "standalone",
  "background_color": "#14213d",
  "theme_color": "#14213d",
- "lang": "ru",
+ "lang": "he",
  "icons": [
   {
    "src": "icon-192.png",

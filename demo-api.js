@@ -1,7 +1,7 @@
 /* Demo mode for the creator inbox: a fake /api/* backed by localStorage, seeded with invented comments.
    Nothing here is real: every name, message and number is made up for the demo. */
 (function(){
-  const KEY="inboxDemoDb", H=3600e3;
+  const KEY="inboxDemoDb3", H=3600e3;
   const ago=h=>new Date(Date.now()-h*H).toISOString();
   // [hoursAgo, platform, kind, source, cat, author, avatar, text ru, text he, where ru, where he, suggested ru, suggested he, extra]
   const SEED=[
@@ -24,8 +24,9 @@
     [48,"youtube","comment","video","Q","Рахель","r1","Какую книгу посоветуете начать читать?","איזה ספר תמליץ להתחיל לקרוא?","Урок: Мудрость отцов","שיעור: חכמת האבות","Начните с «Пиркей Авот» — короткие главы и глубокие мысли.","התחילי מ\"פרקי אבות\": פרקים קצרים ומחשבות עמוקות.",{decision:"reply",decidedAt:ago(46),replyText:"Начните с «Пиркей Авот» — короткие главы и глубокие мысли. Удачи!"}],
     [45,"tiktok","comment","short","T","moshe_kz","z1","Шалом из Алматы!","שלום מאלמטי!","Шорт: Зачем человеку суббота","שורט: למה לאדם שבת","","",{decision:"like",decidedAt:ago(44)}],
     [70,"instagram","dm","","R","tamar.b","t1","Рав, можно задать вопрос о свадьбе дочери? Это долгий разговор.","רב, אפשר לשאול שאלה על החתונה של הבת שלי? זו שיחה ארוכה.","","","Мазаль тов! Конечно, давайте созвонимся на неделе.","מזל טוב! בוודאי, בואי נדבר בטלפון במהלך השבוע.",{decision:"later",decidedAt:ago(60),replyText:""}],
-    [100,"youtube","comment","video","T","Ефим","e1","Спасибо, теперь всё понятно!","תודה, עכשיו הכול ברור!","Урок: Мудрость отцов","שיעור: חכמת האבות","","",{decision:"reply",decidedAt:ago(95),replyText:"Рад помочь, Ефим!",status:"done",doneNote:"נשלח ע\"י דוד"}],
+    [100,"youtube","comment","video","T","Ефим","e1","Спасибо, теперь всё понятно!","תודה, עכשיו הכול ברור!","Урок: Мудрость отцов","שיעור: חכמת האבות","","",{decision:"reply",decidedAt:ago(95),replyText:"Рад помочь, Ефим!",approval:"approved",approvedAt:ago(90),status:"done",doneNote:"בוצע אחרי אישור שני"}],
     [4,"telegram","comment","video","Q","Лиора","q1","Когда следующий урок в прямом эфире?","מתי השיעור הבא בשידור חי?","Пост: Расписание уроков","פוסט: לוח השיעורים","В четверг в 20:00 по Израилю. Ждём вас!","ביום חמישי ב-20:00 שעון ישראל. מחכים לך!"],
+    [8,"youtube","comment","video","T","mira.k","m2","Thank you, I watch the short lessons on the way to work.","תודה, אני צופה בשיעורים הקצרים בדרך לעבודה.","Урок: Сила утренней молитвы","שיעור: הכוח של תפילת הבוקר","Thank you, Mira. Glad the short lessons keep you company.","תודה, מירה. שמח שהשיעורים הקצרים מלווים אותך."],
     [18,"youtube","comment","video","Q","Олег","h1","Почему евреи так много спорят?","למה יהודים מתווכחים כל כך הרבה?","Урок: Спор ради Небес","שיעור: מחלוקת לשם שמיים","Потому что спор ради истины — часть учёбы. Об этом будет целый урок!","כי ויכוח לשם האמת הוא חלק מהלימוד. יהיה על זה שיעור שלם!",{idea:true,ideaAt:ago(17)}],
   ];
   function seed(){
@@ -48,9 +49,11 @@
     const path=url.pathname.slice(5),db=load(),body=init.body?JSON.parse(init.body):{},it=db.items[body.id];
     if(path==="items")return ok({items:Object.entries(db.items).map(([id,v])=>({...v,id})),club:db.club});
     if(path==="login"||path==="logout")return ok({ok:true});
-    if(path==="decide"&&it){it.decision=body.decision??null;it.decidedAt=body.decision?new Date().toISOString():null;if(body.decision==="reply"||body.decision==="later")it.replyText=body.replyText||null}
+    if(path==="decide"&&it){it.decision=body.decision??null;it.decidedAt=body.decision?new Date().toISOString():null;it.approval=null;it.approvedAt=null;if(!body.decision){it.replyText=null;it.status="new";it.doneNote=null}else if(body.decision==="reply"||body.decision==="later")it.replyText=body.replyText||null;else it.replyText=null}
+    else if(path==="approve"&&it){if(!it.decision||it.decision==="later")return new Response('{"error":"nothing to approve"}',{status:400});it.approval="approved";it.approvedAt=new Date().toISOString();it.status="done";it.doneNote="בוצע אחרי אישור שני"}
+    else if(path==="return"&&it){it.decision=null;it.decidedAt=null;it.replyText=null;it.approval=null;it.approvedAt=null;it.status="new";it.doneNote=null}
     else if(path==="mark"&&it){it[body.field]=body.value??null;it[body.field+"At"]=body.value?new Date().toISOString():null}
-    else if(path==="sent"&&it){if(body.sent===false){it.status="new";it.doneNote=null}else{it.status="done";it.doneNote="נשלח ע\"י דוד"}}
+    else if(path==="sent"&&it){if(body.sent===false){it.status="new";it.doneNote=null;it.approval=null;it.approvedAt=null}else{it.approval="approved";it.approvedAt=new Date().toISOString();it.status="done";it.doneNote="בוצע אחרי אישור שני"}}
     else if(path==="done"){const c={reply:0,like:0,delete:0,skip:0};Object.values(db.items).forEach(i=>{if(i.decision in c&&i.status!=="done")c[i.decision]++});save(db);return ok({ok:true,notified:false,counts:c})}
     else return new Response('{"error":"unknown"}',{status:404});
     save(db);return ok({ok:true});
@@ -59,7 +62,7 @@
   addEventListener("DOMContentLoaded",()=>{
     const b=document.createElement("div");b.className="demo-ribbon";b.setAttribute("dir","rtl");
     b.innerHTML='<span>דמו · כל השמות וההודעות בדויים · Демо: данные вымышлены</span><button type="button">איפוס</button>';
-    b.querySelector("button").onclick=()=>{try{localStorage.removeItem(KEY);localStorage.removeItem("inboxCache")}catch(e){}location.reload()};
+    b.querySelector("button").onclick=()=>{try{localStorage.removeItem(KEY);localStorage.removeItem("inboxDemoDb");localStorage.removeItem("inboxDemoDb2");localStorage.removeItem("inboxCache");localStorage.removeItem("inboxHelp2");sessionStorage.removeItem("inboxRole")}catch(e){}location.reload()};
     document.body.append(b);
   });
 })();

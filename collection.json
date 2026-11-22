@@ -1,0 +1,12 @@
+{
+  "times": ["09:22", "19:22"],
+  "days": { "he": "ראשון–חמישי", "ru": "вс–чт" },
+  "lastRun": "2026-11-05T19:22:00+02:00",
+  "networks": [
+    { "id": "youtube", "auto": true },
+    { "id": "tiktok", "auto": false },
+    { "id": "instagram", "auto": false },
+    { "id": "telegram", "auto": false },
+    { "id": "facebook", "auto": false }
+  ]
+}

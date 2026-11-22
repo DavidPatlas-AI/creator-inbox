@@ -7,18 +7,18 @@
 <meta name="theme-color" content="#14213d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Почта автора">
+<meta name="apple-mobile-web-app-title" content="תיבת התגובות">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-192.png">
 <!-- link preview when the address is sent in WhatsApp / Telegram -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="Почта автора — демо">
-<meta property="og:description" content="Письма и комментарии зрителей, хроника дня и цифры канала — в одном месте.">
+<meta property="og:title" content="תיבת התגובות של היוצר — דמו">
+<meta property="og:description" content="דמו ציבורי עם נתונים בדויים: תגובות, תרגום לעברית, טיוטה, ואישור בשני שלבים.">
 <meta property="og:image" content="share.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<title>תיבת ההודעות של היוצר — דמו</title>
+<title>תיבת התגובות של היוצר — דמו</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Assistant:wght@400;600;700;800&family=PT+Serif&family=PT+Sans:wght@400;700&display=swap">
 <style>
@@ -359,6 +359,34 @@ html[dir="rtl"] .enum b{text-align:right}
 .catpill[aria-pressed="true"]{background:var(--navy);color:#fff} .catpill[aria-pressed="true"] .n{background:var(--gold);color:var(--navy)}
 .catpill.bad{color:var(--bad)} .catpill.bad[aria-pressed="true"]{background:var(--bad);color:#fff}
 .who-img{flex:none;width:34px;height:34px;border-radius:50%;object-fit:cover;margin-inline-end:8px;vertical-align:middle;border:2px solid var(--paper);box-shadow:0 0 0 1px var(--line);background:var(--soft)}
+/* two-step approval, collection snapshot, and the coming-soon roadmap */
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.roles button{border:2px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:#fff;border-radius:12px;padding:8px 6px;font-weight:800;font-size:15px;cursor:pointer}
+.roles button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.collect{background:var(--paper);border-radius:22px;box-shadow:var(--shadow);padding:14px 16px;border-top:4px solid var(--gold);display:flex;flex-direction:column;gap:8px}
+.collect h2{margin:0;font-family:var(--display);font-size:20px}
+.collect p{margin:0}
+.netlist{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.netlist li{background:var(--soft);border-radius:999px;padding:4px 10px;font-size:14px;font-weight:700}
+.netlist li.auto{background:var(--good-soft);color:var(--good)}
+.soonline{margin:0;font-size:14px;font-weight:700;color:var(--warn)}
+.soonbadge{display:inline-block;background:var(--gold);color:var(--navy);font-weight:800;font-size:12px;border-radius:999px;padding:2px 8px;margin-inline-start:6px;vertical-align:middle}
+.qrb.soonq{opacity:.8;cursor:default}
+.btn.held{border-style:dashed}
+.roadmap{display:flex;flex-direction:column;gap:10px}
+.roaditem{background:var(--paper);border-radius:18px;box-shadow:var(--shadow);padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.roaditem h3{margin:0;font-family:var(--display);font-size:18px}
+.roaditem p{margin:0}
+.preview{background:var(--soft);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.times{display:flex;flex-wrap:wrap;gap:8px}
+.times span{font-weight:800;border-radius:999px;padding:4px 12px;background:var(--soft);font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-weight:800;border-radius:999px;padding:2px 8px;font-size:13px;background:var(--paper)}
+.tag.ok{background:var(--good-soft);color:var(--good)}
+.tag.wait{background:var(--warn-soft);color:var(--warn)}
+.tag.part{background:#e1ecff;color:#1d4590}
+@media (prefers-color-scheme: dark){.tag.part{background:#1f2e4a;color:#8fb4f2}}
+.pickline{font-weight:800}
 [hidden]{display:none!important}
 @media (min-width:640px){ .acts{grid-template-columns:repeat(4,1fr)} .acts .full{grid-column:1/-1} .stats{grid-template-columns:repeat(4,1fr)} }
 @media (prefers-reduced-motion:no-preference){ .card{animation:in .18s ease-out} @keyframes in{from{opacity:.4;transform:translateY(4px)}} }
@@ -372,13 +400,17 @@ html[dir="rtl"] .enum b{text-align:right}
     <div class="headrow">
       <img class="avatar" src="rav.jpg" alt="" width="52" height="52">
       <div class="t">
-        <h1 id="h1">תיבת ההודעות של היוצר</h1>
+        <h1 id="h1">תיבת התגובות של היוצר</h1>
         <div class="left" id="left"></div>
         <div class="progress" aria-hidden="true"><i id="prog" style="width:0"></i></div>
       </div>
       <button class="iconbtn" id="sizeBtn" type="button">A+</button>
       <button class="iconbtn" id="helpBtn" type="button">?</button>
       <button class="iconbtn" id="langBtn" type="button">Русский</button>
+    </div>
+    <div class="roles" role="group" id="roles">
+      <button type="button" id="rolePhone" aria-pressed="true">📱 בחירה בטלפון</button>
+      <button type="button" id="roleDesk" aria-pressed="false">🖥 אישור במחשב</button>
     </div>
     <div class="sections">
       <button class="sec" data-sec="dm" aria-pressed="true"><span id="sec-dm-t"></span><span class="n" id="n-dm">0</span><small id="sec-dm-s"></small></button>
@@ -389,14 +421,23 @@ html[dir="rtl"] .enum b{text-align:right}
 </header>
 
 <main class="wrap" id="main"><div class="empty"><strong>טוען… · Загружаем…</strong></div></main>
-<button class="sidetab" id="sideTab" type="button"><span class="dot" id="sideDot" hidden></span><span id="sideTxt">📰 Выпуск дня</span></button>
+<button class="sidetab" id="sideTab" type="button"><span class="dot" id="sideDot" hidden></span><span id="sideTxt">📰 גיליון יומי</span></button>
 <div class="toast" id="toast" hidden><span id="toastText"></span><button id="toastUndo" type="button" hidden></button></div>
 
 <script>
 /* ---------- language ---------- */
-// Always opens in Russian (the rav's language). The Hebrew button is for David and lasts only until the page is closed.
-let lang="ru"; try{const s=sessionStorage.getItem("inboxLangSession"); if(s==="he") lang="he"}catch(e){}
+// Hebrew is the primary language of this public demo. Russian stays one tap away until the tab is closed.
+let lang="he"; try{const s=sessionStorage.getItem("inboxLangSession"); if(s==="he"||s==="ru") lang=s}catch(e){}
 const L=(he,ru)=>lang==="ru"?ru:he;
+// Two roles, on one screen: the phone picks an action, the desktop approves it. Nothing runs before the second step.
+let role="phone"; try{ if(sessionStorage.getItem("inboxRole")==="desk") role="desk" }catch(e){}
+function setRole(next){
+  role=next==="desk"?"desk":"phone";
+  try{ sessionStorage.setItem("inboxRole", role) }catch(e){}
+  if(role==="desk") view="review";
+  else if(view==="review"||view==="soon") view="open";
+  render(); scrollTo({top:0});
+}
 
 /* ---------- access key ---------- */
 // The personal link (?k=...) is used once to log in; the server then keeps a secure cookie.
@@ -476,22 +517,23 @@ function visibility(it){
 }
 
 /* ---------- state ---------- */
-let items=[], club=null, sec="dm", view="open", plat="all", confirming=null, showHostile=false, bulkConfirm=false, busy=false;
+let items=[], club=null, collection=null, sec="comments", view="open", plat="all", confirming=null, showHostile=false, bulkConfirm=false, busy=false;
 let focus=true, focusIdx=0, big=false, ctype="all", bulkThanks=false;
 try{ focus=localStorage.getItem("inboxFocus")!=="0"; big=localStorage.getItem("inboxBig")==="1" }catch(e){}
 document.documentElement.classList.toggle("big", big);
-// text the rav typed but did not send yet — kept on this phone so closing the page never loses it
+// text typed on this phone but not chosen yet — kept here so closing the page never loses it
 let drafts={}; try{ drafts=JSON.parse(localStorage.getItem("inboxDrafts")||"{}")||{} }catch(e){ drafts={} }
 let draftTimer;
 function saveDraftsLocal(){ clearTimeout(draftTimer); draftTimer=setTimeout(()=>{ try{ localStorage.setItem("inboxDrafts", JSON.stringify(drafts)) }catch(e){} }, 300) }
 let lastSavedAt=null;
-let helpSeen=false; try{helpSeen=localStorage.getItem("inboxHelp")==="1"}catch(e){}
+let helpSeen=false; try{helpSeen=localStorage.getItem("inboxHelp2")==="1"}catch(e){}
+if(role==="desk") view="review";
 const $=id=>document.getElementById(id);
 function el(tag,cls,text){const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e}
 function svg(html){const s=document.createElement("span"); s.innerHTML=html; return s.firstChild}
 function fmtDate(s){if(!s) return ""; const d=new Date(s); if(isNaN(d)) return ""; const loc=L("he-IL","ru-RU"); return d.toLocaleDateString(loc,{day:"numeric",month:"long"})+", "+d.toLocaleTimeString(loc,{hour:"2-digit",minute:"2-digit"})}
 const isDM=it=>it.kind==="dm"||it.kind==="email";
-function bucket(it){ if(it.status==="done") return "done"; if(!it.decision) return "open"; if(it.decision==="later") return "later"; return "wait" }
+function bucket(it){ if(it.status==="done") return "done"; if(!it.decision) return "open"; if(it.decision==="later") return "later"; if(it.approval!=="approved") return "review"; return "wait" }
 
 let toastTimer;
 function toast(msg, undo){
@@ -503,10 +545,13 @@ function toast(msg, undo){
 /* ---------- static text ---------- */
 function applyLang(){
   document.documentElement.lang=lang; document.documentElement.dir=lang==="ru"?"ltr":"rtl";
-  document.title=L("תיבת ההודעות של היוצר — דמו","Почта автора — демо");
-  $("h1").textContent=L("תיבת ההודעות של היוצר","Почта автора");
+  document.title=L("תיבת התגובות של היוצר — דמו","Почта автора — демо");
+  $("h1").textContent=L("תיבת התגובות של היוצר","Почта автора");
   $("langBtn").textContent=L("Русский","עברית");
   $("helpBtn").setAttribute("aria-label",L("איך משתמשים","Как пользоваться"));
+  $("rolePhone").textContent=L("📱 בחירה בטלפון","📱 Выбор на телефоне");
+  $("roleDesk").textContent=L("🖥 אישור במחשב","🖥 Одобрение на компьютере");
+  $("roles").setAttribute("aria-label",L("שני שלבי האישור","Два шага одобрения"));
   $("sec-dm-t").textContent=L("הודעות פרטיות","Личные сообщения");
   $("sec-dm-s").textContent=L("רק אליך","только вам");
   $("sec-c-t").textContent=L("תגובות","Комментарии");
@@ -516,6 +561,8 @@ function applyLang(){
 /* ---------- render ---------- */
 function render(){
   updateSideTab();
+  $("rolePhone").setAttribute("aria-pressed", String(role==="phone"));
+  $("roleDesk").setAttribute("aria-pressed", String(role==="desk"));
   const open=items.filter(it=>bucket(it)==="open");
   const dmOpen=open.filter(it=>isDM(it)&&it.flag!=="hostile"), cOpen=open.filter(it=>!isDM(it)&&it.flag!=="hostile");
   $("n-dm").textContent=dmOpen.length; $("n-comments").textContent=cOpen.length;
@@ -536,18 +583,18 @@ function render(){
       plats.forEach(p=>{const b=el("button","pill"); b.append(svg(LOGO[p]||LOGO.email), el("span",null,PNAME[p]||p), el("span","n",String(pool.filter(i=>i.platform===p).length))); b.setAttribute("aria-pressed",String(plat===p)); b.onclick=()=>{plat=p;render()}; more.append(b)});
     }
   }
-  const cnt={later:0,wait:0,done:0}; items.forEach(it=>{const b=bucket(it); if(b in cnt) cnt[b]++});
-  const toSend=items.filter(it=>it.decision==="reply"&&it.status!=="done").length;
+  const cnt={later:0,review:0,done:0}; items.forEach(it=>{const b=bucket(it); if(b in cnt) cnt[b]++});
   const nIdeas=items.filter(it=>it.idea).length, nLeads=items.filter(it=>it.lead).length;
-  [...(lang==="he"?[["send","📤 לשליחה"]]:[]),["stats",L("📊 הערוץ","📊 Канал")],["ideas",L("💡 נושאים לשיעורים","💡 Темы уроков")],["leads",L("🎓 תלמידים","🎓 Ученики")],["digest",L("📰 כרוניקת היום","📰 Хроника дня")],["later",L("לאחר כך","На потом")],["wait",L("ממתין לביצוע","Ждёт выполнения")],["done",L("בוצע","Готово")],["club",L("מועדון","Клуб")]].forEach(([k,t])=>{
-    const b=el("button","pill"+(k==="stats"||k==="digest"||k==="send"?" hot":"")); b.append(el("span",null,t)); if(k!=="stats"&&k!=="digest") b.append(el("span","n",k==="club"?String(club?.total??"–"):k==="send"?String(toSend):k==="ideas"?String(nIdeas):k==="leads"?String(nLeads):String(cnt[k]))); b.setAttribute("aria-pressed",String(view===k));
+  [["review",L("אישור שני","Второе одобрение"),cnt.review],["stats",L("📊 הערוץ","📊 Канал"),null],["digest",L("📰 גיליון","📰 Лист"),null],["soon",L("בקרוב","Скоро"),null],["ideas",L("💡 נושאים לשיעורים","💡 Темы уроков"),nIdeas],["leads",L("🎓 תלמידים","🎓 Ученики"),nLeads],["later",L("לאחר כך","На потом"),cnt.later],["done",L("בוצע","Готово"),cnt.done],["club",L("מועדון","Клуб"),club?.total??"–"]].forEach(([k,t,n])=>{
+    const b=el("button","pill"+(k==="review"||k==="stats"||k==="digest"||k==="soon"?" hot":"")); b.append(el("span",null,t)); if(n!=null) b.append(el("span","n",String(n))); b.setAttribute("aria-pressed",String(view===k));
     b.onclick=()=>{view=view===k?"open":k; plat="all"; render(); scrollTo({top:0})}; more.append(b);
   });
 
   const main=$("main"); main.replaceChildren();
   if(!helpSeen && view==="open") main.append(helpCard());
   if(view==="club"){ renderClub(main); return }
-  if(view==="send"){ if(lang!=="he"){ view="open"; return render() } renderSend(main); return }
+  if(view==="review"){ renderReview(main); return }
+  if(view==="soon"){ renderSoon(main); return }
   if(view==="ideas"){ renderIdeas(main); return }
   if(view==="leads"){ renderLeads(main); return }
   if(view==="stats"){ renderStats(main); return }
@@ -557,12 +604,15 @@ function render(){
   if(view==="open"){
     list=items.filter(it=>bucket(it)==="open" && (sec==="dm"?isDM(it):!isDM(it)) && (plat==="all"||it.platform===plat));
   } else list=items.filter(it=>bucket(it)===view);
-  // personal questions for the rav first, then questions, then thanks; newest first inside each group
+  // personal questions first, then questions, then thanks; newest first inside each group
   const RANK={R:0,Q:1,M:2,D:3,T:4};
   list.sort((a,b)=>(isUrgent(b)-isUrgent(a)) || ((RANK[a.cat]??3)-(RANK[b.cat]??3)) || String(b.date||"").localeCompare(String(a.date||"")));
 
   // sort-by-type chips: urgent / questions / thanks / curses ...
+  if(view==="open") main.append(collectionBanner());
+  if(view==="later") main.append(el("p","soonline",L("«לאחר כך» הוא סימון זמני בדמו. מצב «מוחזק», שמונע ביצוע, עדיין לא פעיל — בקרוב.","«На потом» — временная пометка демо. Состояние «удержано», которое не даёт выполнить действие, ещё не включено.")));
   if(view==="open"){
+    main.append(el("p","soonline",L("סיווג אוטומטי (תודה, ברכה, שאלה, ביקורת, רגיש) עם תשובות מוכנות ❤️ — בקרוב. הסינון לפי סוג הוא הדגמה.","Автоклассификация (благодарность, пожелание, вопрос, критика, чувствительное) и готовые ответы ❤️ — скоро. Фильтр ниже только демонстрация.")));
     main.append(catChips(list));
     if(ctype==="H") list=list.filter(it=>it.flag==="hostile");
     else if(ctype==="U") list=list.filter(isUrgent);
@@ -573,12 +623,12 @@ function render(){
       if(ready.length>1){
         const bx=el("div","bulk");
         if(bulkThanks){
-          bx.append(el("div",null,L("לאשר "+ready.length+" תשובות תודה כמו שהן? (קבוצות יקבלו לייק)","Одобрить все "+ready.length+" ответа на благодарности как есть? (группам — «Нравится»)")));
+          bx.append(el("div",null,L("לבחור תשובה לכל "+ready.length+" התודות? הבחירה תחכה לאישור שני, בלי ביצוע.","Выбрать ответ для всех "+ready.length+" благодарностей? Выбор будет ждать второго одобрения, без выполнения.")));
           const r2=el("div","row2");
-          const y=btn("reply",null,L("כן, לאשר הכול","Да, одобрить все"),async()=>{ bulkThanks=false; y.disabled=true; let n=0; for(const it of ready){ await decide(it, it.kind==="group"?"like":"reply", it.kind==="group"?null:it.suggested, true); n++ } toast(L("✓ אושרו "+n+" תשובות","✓ Одобрено: "+n)); render() });
+          const y=btn("reply",null,L("כן, לבחור הכול","Да, выбрать все"),async()=>{ bulkThanks=false; y.disabled=true; let n=0; for(const it of ready){ await decide(it, it.kind==="group"?"like":"reply", it.kind==="group"?null:it.suggested, true); n++ } toast(L("✓ נבחרו "+n+". ממתינות לאישור שני","✓ Выбрано: "+n+". Ждут второго одобрения")); render() });
           const no=btn("",null,L("לא","Нет"),()=>{ bulkThanks=false; render() }); r2.append(y,no); bx.append(r2);
         } else {
-          const b=btn("like",I.heart,L("✓ לאשר את כל התודות ("+ready.length+")","✓ Одобрить все благодарности ("+ready.length+")"),()=>{ bulkThanks=true; render() }); bx.append(b);
+          const b=btn("like",I.heart,L("לבחור את כל התודות ("+ready.length+")","Выбрать все благодарности ("+ready.length+")"),()=>{ bulkThanks=true; render() }); bx.append(b);
         }
         main.append(bx);
       }
@@ -596,13 +646,10 @@ function render(){
     if(queue.length){ pos.append(document.createTextNode(L("הודעה ","Сообщение ")+(focusIdx+1)+" "), el("span",null,L("מתוך ","из ")+queue.length)) }
     const toList=el("button","linkbtn",L("להציג את כולן ברשימה","Показать списком")); toList.onclick=()=>{focus=false; try{localStorage.setItem("inboxFocus","0")}catch(e){} render()};
     bar.append(pos,toList); main.append(savedBanner()||""); main.append(bar);
-    const chosen=items.filter(it=>bucket(it)==="wait").length;
+    const chosen=items.filter(it=>bucket(it)==="review").length;
     if(chosen){
-      const done=btn("reply",I.send,L("סיימתי לעכשיו: לשלוח לדוד ("+chosen+")","Готово: отправить Давиду ("+chosen+")"),async()=>{
-        done.disabled=true;
-        try{ const r=await fetch("/api/done",{method:"POST",credentials:"same-origin"}); if(!r.ok) throw 0; toast(L("נשלח לדוד. תודה!","Отправлено Давиду. Спасибо!")) }
-        catch(e){ toast(L("השליחה נכשלה, כדאי לנסות שוב","Не удалось отправить")); done.disabled=false }
-      });
+      main.append(el("p","note",L("הבחירות נשמרו ולא בוצעו. הן מחכות לאישור שני במחשב.","Выборы сохранены и не выполнены. Они ждут второго одобрения на компьютере.")));
+      const done=btn("reply",I.send,L("לפתוח את האישור השני ("+chosen+")","Открыть второе одобрение ("+chosen+")"),()=>setRole("desk"));
       main.append(done);
     }
     if(!queue.length){
@@ -641,13 +688,13 @@ function render(){
   if(!list.length && !hostile.length){
     const e=el("div","empty");
     const msg = view==="open" ? (sec==="dm"?[L("אין הודעות פרטיות חדשות","Новых личных сообщений нет"),L("כשמישהו ישלח לך הודעה, היא תופיע כאן.","Когда вам напишут, сообщение появится здесь.")]:[L("אין תגובות חדשות","Новых комментариев нет"),L("כשיגיעו תגובות חדשות, הן יופיעו כאן.","Новые комментарии появятся здесь.")])
-      : view==="later"?[L("אין כלום לאחר כך","Нет отложенных"),L("לוחצים \"לאחר כך\" כדי לחזור להודעה אחר כך.","Нажмите «На потом», чтобы вернуться позже.")]
-      : view==="wait"?[L("הכול בוצע","Всё выполнено"),L("כאן רואים מה דוד עוד צריך לבצע.","Здесь видно, что Давид ещё должен сделать.")]
-      : [L("עדיין ריק","Пока пусто"),L("כאן יופיע מה שכבר טופל.","Здесь будет то, что уже сделано.")];
+      : view==="later"?[L("אין כלום לאחר כך","Нет отложенных"),L("מצב «מוחזק» שמונע ביצוע עדיין בקרוב.","Состояние «удержано» ещё впереди.")]
+      : view==="wait"?[L("אין פעולות שמחכות לביצוע","Нет действий, ждущих выполнения"),L("ביצוע קורה רק אחרי האישור השני במחשב.","Выполнение происходит только после второго одобрения на компьютере.")]
+      : [L("עדיין ריק","Пока пусто"),L("כאן יופיע מה שכבר בוצע אחרי אישור שני.","Здесь будет то, что уже выполнено после второго одобрения.")];
     e.append(el("strong",null,msg[0]), document.createTextNode(msg[1])); main.append(e); return;
   }
   list.forEach(it=>main.append(card(it)));
-  main.append(el("p","note",L("שום דבר לא נשלח לבד: דוד שולח את התשובות. תגובה שנמחקת נעלמת לתמיד.","Ничего не уходит само: ответы отправляет Давид. Удалённый комментарий исчезает навсегда.")));
+  main.append(el("p","note",L("בחירה בטלפון לא מבצעת את הפעולה. אישור שני במחשב מבצע אותה. מחיקה, אחרי אישור, מסירה את התגובה.","Выбор на телефоне ничего не выполняет. Второе одобрение на компьютере выполняет действие. Удаление после одобрения снимает комментарий.")));
 }
 
 /* ---------- urgent / ideas / club candidates / author file / read aloud ---------- */
@@ -734,7 +781,7 @@ function speak(text, lng, btn){
 /* Type of message: rav's personal questions, questions, wants to learn, thanks, other, rude/curses */
 function catOf(it){ return it.flag==="hostile" ? "H" : (["R","Q","M","T"].includes(it.cat) ? it.cat : "O") }
 function catChips(list){
-  const CT=[["all",L("הכול","Все"),"📋"],["U",L("דחוף","Срочно"),"🔥"],["R",L("שאלות אישיות אליך","Личные вопросы"),"🔸"],["Q",L("שאלות","Вопросы"),"❓"],["M",L("רוצים ללמוד","Хотят учиться"),"📖"],["T",L("תודות וברכות","Благодарности"),"🙏"],["O",L("תגובות אחרות","Другие комментарии"),"💬"],["H",L("גסות וקללות","Грубые и проклятия"),"🚫"]];
+  const CT=[["all",L("הכול","Все"),"📋"],["U",L("דחוף","Срочно"),"🔥"],["R",L("שאלות אישיות אליך","Личные вопросы"),"🔸"],["Q",L("שאלות","Вопросы"),"❓"],["M",L("רוצים ללמוד","Хотят учиться"),"📖"],["T",L("תודות וברכות","Благодарности"),"❤️"],["O",L("תגובות אחרות","Другие комментарии"),"💬"],["H",L("גסות וקללות","Грубые и проклятия"),"🚫"]];
   const row=el("div","cats");
   CT.forEach(([k,t,ic])=>{
     const n = k==="all" ? list.filter(i=>i.flag!=="hostile").length : k==="U" ? list.filter(isUrgent).length : list.filter(i=>catOf(i)===k).length;
@@ -757,21 +804,21 @@ function savedBanner(){
   t.append(el("span","ck","✓"));
   const txt=el("div");
   txt.append(document.createTextNode(L("כל מה שסימנת נשמר (","Всё, что вы отметили, сохранено (")), el("b",null,String(n)), document.createTextNode(L(").",").")));
-  txt.append(el("br"), document.createTextNode(L("אפשר לסגור את הדף בכל רגע — שום דבר לא ילך לאיבוד. דוד יראה הכול ויבצע.","Страницу можно закрыть в любой момент — ничего не потеряется. Давид всё увидит и выполнит.")));
+  txt.append(el("br"), document.createTextNode(L("אפשר לסגור את הדף בכל רגע. בחירה בטלפון עדיין לא מבוצעת — היא מחכה לאישור שני במחשב.","Страницу можно закрыть в любой момент. Выбор на телефоне ещё не выполнен — он ждёт второго одобрения на компьютере.")));
   if(lastSavedAt){ const tm=lastSavedAt.toLocaleTimeString(L("he-IL","ru-RU"),{hour:"2-digit",minute:"2-digit"}); txt.append(el("br"), el("small",null,L("נשמר לאחרונה: ","Последнее сохранение: ")+tm)) }
   s.append(t.firstChild, txt); return s;
 }
 
 function helpCard(){
   const h=el("section","help");
-  h.append(el("h2",null,L("איך זה עובד","Как это работает")));
+  h.append(el("h2",null,L("איך התיבה עובדת","Как это работает")));
   const ol=el("ol","steps");
-  [[L("קוראים את ההודעה. בראש כל הודעה כתוב מאיפה היא הגיעה: לוגו של הרשת, ואם זו הודעה פרטית או תגובה על סרטון, פוסט או סטורי.","Читаете сообщение. Сверху видно, откуда оно: значок сети и что это — личное сообщение или комментарий к видео, посту, сторис.")],
-   [L("בודקים את התשובה שהכנו (בכחול). אפשר לשנות אותה.","Смотрите подготовленный ответ (синим). Его можно изменить.")],
-   [L("לוחצים על כפתור אחד: לענות, לייק, לאחר כך, לדלג או למחוק. ההודעה הבאה מופיעה מיד, ודוד מבצע את השאר.","Нажимаете одну кнопку: ответить, нравится, на потом, пропустить или удалить. Остальное сделает Давид.")],
-   [L("כל לחיצה נשמרת מיד (מופיע ✓ ירוק). כשמסיימים — לוחצים «סיימתי לעכשיו» ודוד מקבל את הרשימה.","Каждое нажатие сохраняется сразу (появится зелёная ✓). Когда закончите — нажмите «Готово», и Давид получит список.")]
+  [[L("התגובות נאספות פעמיים ביום, ראשון עד חמישי, בשעה 09:22 ובשעה 19:22. כרגע רק יוטיוב נאסף אוטומטית. שאר הרשתות ממתינות למפתחות.","Комментарии собираются дважды в день, с воскресенья по четверг, в 09:22 и в 19:22. Сейчас автоматически собирается только YouTube. Остальные сети ждут ключи.")],
+   [L("קוראים את הטקסט המקורי, לרוב ברוסית. מתחתיו תרגום לעברית, וטיוטת תשובה שאפשר לערוך.","Читаете исходный текст, чаще всего на русском. Под ним перевод на иврит и черновик ответа, который можно изменить.")],
+   [L("בטלפון בוחרים פעולה אחת: תשובה, לייק, מחיקה או דילוג. הבחירה נשמרת, ועדיין לא מתבצעת.","На телефоне выбирают одно действие: ответ, лайк, удаление или пропуск. Выбор сохраняется и ещё не выполняется.")],
+   [L("במחשב מאשרים את הבחירה. רק אחרי האישור השני הפעולה מתבצעת.","На компьютере подтверждают выбор. Действие выполняется только после этого второго одобрения.")]
   ].forEach(([t],i)=>{const li=el("li"); li.append(el("span","num",String(i+1)), el("span",null,t)); ol.append(li)});
-  const ok=el("button","ok",L("הבנתי","Понятно")); ok.onclick=()=>{helpSeen=true; try{localStorage.setItem("inboxHelp","1")}catch(e){} render()};
+  const ok=el("button","ok",L("הבנתי","Понятно")); ok.onclick=()=>{helpSeen=true; try{localStorage.setItem("inboxHelp2","1")}catch(e){} render()};
   h.append(ol, ok); return h;
 }
 
@@ -809,30 +856,28 @@ function card(it){
   if(it.where){
     const a=el(it.url?"a":"div","ctx"); if(it.url && /^https:\/\//.test(it.url)){a.href=it.url; a.target="_blank"; a.rel="noopener noreferrer"}
     if(it.thumb && /^https:\/\//.test(it.thumb)){const im=el("img"); im.src=it.thumb; im.alt=""; im.loading="lazy"; im.referrerPolicy="no-referrer"; im.onerror=()=>im.remove(); a.append(im)}
-    const ct=el("div","ct"); ct.append(el("b",null, isDM(it)?L("שיחה","Переписка"):L("נכתב על:","Написано к:")), el("span",null,(lang==="he"&&it.where_he)||it.where)); a.append(ct); inn.append(a);
+    const ct=el("div","ct"); const title=el("span",null,it.where||""); title.dir="auto"; ct.append(el("b",null, isDM(it)?L("שיחה","Переписка"):L("נכתב על:","Написано к:")), title); if(it.where_he){ const he=el("span",null,it.where_he); he.dir="rtl"; ct.append(he) } a.append(ct); inn.append(a);
   }
 
-  // the message(s)
+  // original text first (often Russian, sometimes English), Hebrew translation underneath
   const bub=el("div","bubbles");
   if(Array.isArray(it.thread)&&it.thread.length){
     const off=Math.max(0,it.thread.length-6);
-    it.thread.slice(-6).forEach((m,k)=>{const b=el("div","bubble "+(m.from==="us"?"us":"them")); const he=lang==="he" && Array.isArray(it.thread_he) ? it.thread_he[off+k] : null;
-      if(m.from==="us") b.append(el("small",null,L("אתה כתבת","Вы написали"))); else if(he) b.append(el("small",null,"🌐 תרגום לעברית"));
-      b.append(document.createTextNode(he||m.text||"")); b.dir=he?"rtl":"auto";
-      if(he){ const det=el("details","orig"); det.append(el("summary",null,"המקור ברוסית"), el("div",null,m.text||"")); det.lastChild.dir="auto"; b.append(det) }
-      bub.append(b)});
-  } else if(lang==="he" && !it.text_he && it.flag==="hostile"){
-    // rude comments are not translated word for word — a short Hebrew label, the Russian one tap away
-    const b=el("div","bubble them"); b.dir="rtl";
-    b.append(el("small",null,"🚫 תגובה גסה / עוינת"), document.createTextNode("לא תורגמה. אין צורך לענות — אפשר למחוק."));
-    const det=el("details","orig"); det.append(el("summary",null,"להציג את המקור ברוסית"), el("div",null,it.text||"")); det.lastChild.dir="auto"; b.append(det); bub.append(b);
-  } else if(lang==="he" && it.text_he){
-    // Hebrew mode: a natural Hebrew translation first, the original one tap away (the reply itself still goes out in Russian)
-    const b=el("div","bubble them"); b.dir="rtl";
-    b.append(el("small",null,"🌐 תרגום לעברית"), document.createTextNode(it.text_he));
-    const det=el("details","orig"); det.append(el("summary",null,"המקור ברוסית"), el("div",null,it.text||"")); det.lastChild.dir="auto";
-    b.append(det); bub.append(b);
-  } else { const b=el("div","bubble them",it.text||""); b.dir="auto"; bub.append(b) }
+    it.thread.slice(-6).forEach((m,k)=>{
+      const b=el("div","bubble "+(m.from==="us"?"us":"them"));
+      b.dir="auto";
+      b.append(el("small",null,m.from==="us"?L("נכתב מכאן","Написано отсюда"):L("המקור","Оригинал")), document.createTextNode(m.text||""));
+      bub.append(b);
+      const he=Array.isArray(it.thread_he)?it.thread_he[off+k]:null;
+      if(he && m.from!=="us"){ const tr=el("div","trline"); tr.dir="rtl"; tr.append(el("b",null,L("עברית: ","Иврит: ")), document.createTextNode(he)); bub.append(tr) }
+    });
+  } else {
+    const b=el("div","bubble them"); b.dir="auto";
+    b.append(el("small",null,L("המקור","Оригинал")), document.createTextNode(it.text||""));
+    bub.append(b);
+    if(it.text_he){ const tr=el("div","trline"); tr.dir="rtl"; tr.append(el("b",null,L("עברית: ","Иврит: ")), document.createTextNode(it.text_he)); bub.append(tr) }
+  }
+  bub.append(el("p","soonline",L("מילון ביטויים מובנה, מרוסית ומאנגלית לעברית ובלי שירות חיצוני — בקרוב.","Встроенный словарь фраз, с русского и английского на иврит и без внешнего сервиса — скоро.")));
   inn.append(bub);
 
   const b=bucket(it), [vIcon,vText]=visibility(it);
@@ -841,24 +886,24 @@ function card(it){
   if((b==="open"||b==="later") && it.kind==="group"){
     inn.append(vis);
     const acts=el("div","acts");
-    const l=btn("like",I.heart,L("לייק לכולן","«Нравится» всем"),()=>decide(it,"like"));
-    const sk=btn("",I.skip,L("לדלג","Пропустить"),()=>decide(it,"skip"));
-    acts.append(l,sk); inn.append(acts);
+    const l=btn("like",I.heart,L("לייק","Лайк"),()=>decide(it,"like"));
+    const sk=btn("",I.skip,L("דילוג","Пропуск"),()=>decide(it,"skip"));
+    acts.append(l,sk,heldBtn()); inn.append(acts);
   } else if(b==="open"||b==="later"){
     const box=el("div","replybox");
-    const id="r-"+it.id; const lb=el("label",null,L("התשובה שתישלח (ברוסית, אפשר לשנות):","Ваш ответ (можно изменить):")); lb.htmlFor=id;
+    const id="r-"+it.id; const lb=el("label",null,L("טיוטת תשובה (אפשר לערוך):","Черновик ответа (можно изменить):")); lb.htmlFor=id;
     const ta=el("textarea"); ta.id=id; ta.dir="auto"; ta.placeholder=L("אפשר לכתוב כאן תשובה…","Напишите ответ…"); ta.value=drafts[it.id]??it.replyText??it.suggested??"";
     const ls=el("div","localsave"); if(drafts[it.id]!=null) ls.textContent=L("✓ הטקסט שלך שמור בטלפון","✓ Ваш текст сохранён на телефоне");
-    ta.oninput=()=>{drafts[it.id]=ta.value; saveDraftsLocal(); ls.textContent=L("✓ הטקסט שלך שמור בטלפון","✓ Ваш текст сохранён на телефоне")};
+    const gloss=el("div","trline"); gloss.dir="rtl";
+    const syncGloss=()=>{ gloss.replaceChildren(); if(it.suggested_he && ta.value===(it.suggested||"")){ gloss.hidden=false; gloss.append(el("b",null,L("הטיוטה בעברית: ","Черновик на иврите: ")), document.createTextNode(it.suggested_he)) } else gloss.hidden=true };
+    ta.oninput=()=>{drafts[it.id]=ta.value; saveDraftsLocal(); ls.textContent=L("✓ הטקסט שלך שמור בטלפון","✓ Ваш текст сохранён на телефоне"); syncGloss()};
+    syncGloss();
     const hint = it.suggested
-      ? el("div","drafthint",L("✍️ הכנו טיוטת תשובה. אם היא טובה — לוחצים «לשלוח». אפשר לשנות.","✍️ Мы подготовили ответ. Если он подходит — нажмите «Отправить». Можно изменить."))
-      : el("div","drafthint own",L("✍️ כאן לא הכנו תשובה — כדאי שתענה במילים שלך, או ללחוץ לייק / לדלג.","✍️ Здесь ответ не подготовлен — лучше ответить своими словами, или нажать «Нравится» / «Пропустить»."));
-    // one-tap ready answers (always sent in Russian; Hebrew hint for David)
-    const QR=[["Амен! 🙏","אמן!"],["Спасибо за тёплые слова! 🙏","תודה על המילים החמות!"],["Шабат шалом! 🕯","שבת שלום!"],["Шавуа тов! 🙏","שבוע טוב!"],["Здоровья вам и вашим близким! 🙏","בריאות לך ולקרובים שלך!"],["Полные уроки — на YouTube-канале 📖","השיעורים המלאים ביוטיוב"],["Хороший вопрос! Отвечу в одном из ближайших уроков.","שאלה טובה! אענה באחד השיעורים הקרובים."]];
-    const qr=el("div","qr"); qr.append(el("span","qrl",L("⚡ תשובה מהירה:","⚡ Быстрый ответ:")));
-    QR.forEach(([ru,he])=>{ const b=el("button","qrb",lang==="he"?he:ru); b.type="button"; b.title=ru; b.onclick=()=>{ ta.value=ru; drafts[it.id]=ru; saveDraftsLocal(); ls.textContent=L("✓ נבחרה תשובה מהירה — לחץ אישור","✓ Ответ выбран — нажмите «Одобрить»"); ta.focus() }; qr.append(b) });
-    box.append(hint,lb,qr,ta,ls);
-    if(lang==="he" && it.suggested_he && (ta.value===it.suggested)){ const tr=el("div","trline"); tr.append(el("b",null,"התשובה בעברית: "), document.createTextNode(it.suggested_he)); box.append(tr) }
+      ? el("div","drafthint",L("יש טיוטה מוכנה. אם היא מתאימה — בוחרים «תשובה». הבחירה מחכה לאישור שני במחשב, בלי ביצוע.","Черновик готов. Если он подходит — выберите «Ответ». Выбор ждёт второго одобрения на компьютере и не выполняется."))
+      : el("div","drafthint own",L("אין טיוטה מוכנה. אפשר לכתוב תשובה, או לבחור לייק, מחיקה או דילוג.","Черновика нет. Можно написать ответ или выбрать лайк, удаление или пропуск."));
+    const qr=el("div","qr"); qr.append(el("span","qrl",L("תשובות מוכנות לפי סיווג · בקרוב","Готовые ответы по классу · скоро")));
+    [L("תודה ❤️","Спасибо ❤️"),L("שבת שלום ❤️","Шабат шалом ❤️"),L("שאלה טובה ❤️","Хороший вопрос ❤️")].forEach(label=>{ const chip=el("span","qrb soonq",label); chip.setAttribute("aria-disabled","true"); qr.append(chip) });
+    box.append(hint,lb,qr,ta,ls,gloss);
     // Speaking instead of typing: the phone keyboard's own microphone always works (also as a home-screen app);
     // the in-page button appears only where the browser supports speech recognition.
     const dict=el("div","vis"); dict.append(svg(I.mic), document.createTextNode(L("אפשר לדבר במקום להקליד: לוחצים על המיקרופון במקלדת ואומרים את התשובה.","Можно говорить вместо набора: нажмите микрофон на клавиатуре.")));
@@ -870,7 +915,7 @@ function card(it){
         let rec; try{ rec=new SR() }catch(e){ return }
         rec.lang="ru-RU"; rec.interimResults=false; rec.maxAlternatives=1;
         mb.disabled=true; mb.lastChild.textContent=L("מקשיב… דברו עכשיו","Слушаю… говорите");
-        rec.onresult=e=>{ const t=e.results[0][0].transcript; ta.value=(ta.value.trim()?ta.value.trim()+" ":"")+t; drafts[it.id]=ta.value };
+        rec.onresult=e=>{ const t=e.results[0][0].transcript; ta.value=(ta.value.trim()?ta.value.trim()+" ":"")+t; drafts[it.id]=ta.value; syncGloss() };
         rec.onerror=()=>toast(L("לא הצלחתי לשמוע. אפשר להשתמש במיקרופון של המקלדת.","Не получилось. Используйте микрофон клавиатуры."));
         rec.onend=()=>{ mb.disabled=false; mb.lastChild.textContent=L("להקליט תשובה ברוסית","Надиктовать ответ") };
         try{ rec.start() }catch(e){ rec.onend() }
@@ -879,29 +924,37 @@ function card(it){
     }
     box.append(vis); inn.append(box);
     if(confirming===it.id){
-      const cf=el("div","confirm"); cf.append(el("div",null,L("למחוק את התגובה הזו לתמיד?","Удалить навсегда?")));
-      const r=el("div","row2"); r.append(btn("del",I.trash,L("כן, למחוק","Да, удалить"),()=>decide(it,"delete")), btn("",null,L("לא","Нет"),()=>{confirming=null;render()})); cf.append(r); inn.append(cf);
+      const cf=el("div","confirm"); cf.append(el("div",null,L("לבחור מחיקה? המחיקה תתבצע רק אחרי אישור שני במחשב.","Выбрать удаление? Оно выполнится только после второго одобрения на компьютере.")));
+      const r=el("div","row2"); r.append(btn("del",I.trash,L("כן, לבחור מחיקה","Да, выбрать удаление"),()=>decide(it,"delete")), btn("",null,L("לא","Нет"),()=>{confirming=null;render()})); cf.append(r); inn.append(cf);
     } else {
       const acts=el("div","acts");
-      const r=btn("reply full",I.send,L("לאשר את התשובה (דוד ישלח)","Одобрить ответ (отправит Давид)"),()=>{ if(!ta.value.trim()){toast(L("צריך לכתוב תשובה בשדה הכחול","Напишите ответ в синем поле")); ta.focus(); return} decide(it,"reply",ta.value.trim())});
-      const l=btn("like",I.heart,L("לייק","Нравится"),()=>decide(it,"like"));
-      const later=btn("later",I.clock,L("לאחר כך","На потом"),()=>decide(it,"later",ta.value.trim()||null)); if(b==="later") later.disabled=true;
-      const sk=btn("",I.skip,L("לדלג","Пропустить"),()=>decide(it,"skip"));
-      const d=btn("del",I.trash,L("למחוק","Удалить"),()=>{confirming=it.id;render()});
-      acts.append(r,l,later,sk); if(!isDM(it)) acts.append(d); inn.append(acts);
+      const r=btn("reply full",I.send,L("תשובה","Ответ"),()=>{ if(!ta.value.trim()){toast(L("צריך לכתוב תשובה בשדה הכחול","Напишите ответ в синем поле")); ta.focus(); return} decide(it,"reply",ta.value.trim())});
+      const l=btn("like",I.heart,L("לייק","Лайк"),()=>decide(it,"like"));
+      const d=btn("del",I.trash,L("מחיקה","Удаление"),()=>{confirming=it.id;render()});
+      const sk=btn("",I.skip,L("דילוג","Пропуск"),()=>decide(it,"skip"));
+      acts.append(r,l); if(!isDM(it)) acts.append(d); acts.append(sk,heldBtn()); inn.append(acts);
       inn.append(toolsRow(it));
     }
   } else {
-    const ACT={reply:L("תשובה","ответ"),like:L("לייק","нравится"),delete:L("מחיקה","удалить"),skip:L("דילוג","пропустить")};
+    const ACT={reply:L("תשובה","ответ"),like:L("לייק","лайк"),delete:L("מחיקה","удаление"),skip:L("דילוג","пропуск"),later:L("לאחר כך","на потом")};
     const what=it.decision==="reply"?L("תשובה: «","ответ: «")+(it.replyText||"")+"»":(ACT[it.decision]||"");
     const st=el("div","status "+(b==="done"?"done":it.decision==="delete"?"del":"wait"));
-    st.append(el("span",null, b==="done"?L("בוצע: ","Выполнено: ")+what+(it.doneNote?" ("+it.doneNote+")":""):L("נבחר: ","Выбрано: ")+what+L(". דוד יבצע.",". Давид выполнит.")));
-    if(b==="wait"){const u=el("button","undo",L("ביטול","Отменить")); u.onclick=()=>decide(it,null); st.append(u)}
+    const line=b==="done"
+      ? L("בוצע אחרי אישור שני: ","Выполнено после второго одобрения: ")+what+(it.doneNote?" ("+it.doneNote+")":"")
+      : L("נבחר בטלפון: ","Выбрано на телефоне: ")+what+L(". ממתין לאישור במחשב. לא בוצע.",". Ждёт одобрения на компьютере. Не выполнено.");
+    st.append(el("span",null,line));
+    if(b==="review"||b==="wait"){const u=el("button","undo",L("ביטול הבחירה","Отменить выбор")); u.onclick=()=>decide(it,null); st.append(u)}
     inn.append(st);
   }
   return c;
 }
 function btn(cls,icon,text,fn){const b=el("button","btn "+cls); if(icon) b.append(svg(icon)); b.append(document.createTextNode(text)); b.onclick=fn; return b}
+function heldBtn(){
+  const held=btn("held full",I.clock,L("להחזיק · בקרוב","Удержать · скоро"),()=>{});
+  held.disabled=true;
+  held.title=L("מצב «מוחזק» ימנע ביצוע. עדיין לא פעיל.","Состояние «удержано» не даст выполнить действие. Ещё не включено.");
+  return held;
+}
 
 function renderClub(main){
   if(!club){const e=el("div","empty"); e.append(el("strong",null,L("נתוני המועדון עוד לא נטענו","Данные клуба ещё не загружены"))); main.append(e); return}
@@ -914,25 +967,106 @@ function renderClub(main){
   if(club.updated) main.append(el("p","note",L("עודכן: ","Обновлено: ")+fmtDate(club.updated)));
 }
 
-/* ---------- David's outbox (Hebrew only): replies the rav approved, ready to copy & send by hand ---------- */
-function renderSend(main){
-  const list=items.filter(it=>it.decision==="reply"&&it.status!=="done").sort((a,b)=>String(a.platform).localeCompare(b.platform)||String(a.decidedAt||"").localeCompare(String(b.decidedAt||"")));
+/* ---------- collection snapshot, second approval, and the roadmap ---------- */
+function collectionBanner(){
+  const box=el("section","collect");
+  box.append(el("h2",null,L("איסוף תגובות","Сбор комментариев")));
+  const days=(collection&&collection.days)?(lang==="ru"?collection.days.ru:collection.days.he):L("ראשון–חמישי","вс–чт");
+  const times=(collection&&collection.times)||["09:22","19:22"];
+  box.append(el("p",null,L("פעמיים ביום, "+days+".","Дважды в день, "+days+".")));
+  const slots=el("div","times");
+  times.forEach(t=>{ const s=el("span",null,t); s.dir="ltr"; slots.append(s) });
+  box.append(slots);
+  const nets=el("ul","netlist");
+  const rows=(collection&&collection.networks)||[{id:"youtube",auto:true},{id:"tiktok",auto:false},{id:"instagram",auto:false},{id:"telegram",auto:false},{id:"facebook",auto:false}];
+  rows.forEach(n=>{ const li=el("li",n.auto?"auto":""); const name=el("bdi",null,PNAME[n.id]||n.id); name.dir="ltr"; li.append(name, document.createTextNode(n.auto?L(" · נאסף אוטומטית"," · собирается автоматически"):L(" · ממתין למפתח"," · ждёт ключ"))); nets.append(li) });
+  box.append(nets);
+  box.append(el("p","snote",L("כרגע רק יוטיוב נאסף אוטומטית. שאר הרשתות ממתינות למפתחות.","Сейчас автоматически собирается только YouTube. Остальные сети ждут ключи.")));
+  if(collection&&collection.lastRun){
+    const d=new Date(collection.lastRun); let stamp="";
+    try{ const loc=L("he-IL","ru-RU"); stamp=d.toLocaleDateString(loc,{day:"numeric",month:"long",timeZone:"Asia/Jerusalem"})+", "+d.toLocaleTimeString(loc,{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Jerusalem"}) }
+    catch(e){ stamp=fmtDate(collection.lastRun) }
+    box.append(el("p","snote",L("איסוף אחרון בדמו, בדוי: ","Последний сбор в демо, вымышленный: ")+stamp+"."));
+  }
+  box.append(el("p","soonline",L("סטטוס לכל רשת, כולל «חלקי» כשנאספו רק חלק מהרשתות — בקרוב.","Статус по каждой сети, включая «частично», когда собрана только часть сетей — скоро.")));
+  return box;
+}
+const ACT_NAME=()=>({reply:L("תשובה","ответ"),like:L("לייק","лайк"),delete:L("מחיקה","удаление"),skip:L("דילוג","пропуск")});
+function renderReview(main){
+  const list=items.filter(it=>bucket(it)==="review").sort((a,b)=>String(a.decidedAt||"").localeCompare(String(b.decidedAt||"")));
   const head=el("section","sendhead");
-  head.append(el("h2",null,"📤 תשובות שהיוצר אישר — לשליחה"), el("p",null,list.length?"לכל תשובה: מעתיקים, פותחים את השיחה, מדביקים ושולחים — ואז ✓ נשלח. הטקסט שנשלח הוא ברוסית; התרגום מתחת הוא רק בשבילך.":"אין כרגע תשובות שמחכות לשליחה. כל הכבוד!"));
+  head.append(el("h2",null,L("אישור שני · מחשב","Второе одобрение · компьютер")));
+  head.append(el("p",null,L("כאן מאשרים בחירה שנעשתה בטלפון: תשובה, לייק, מחיקה או דילוג. רק אחרי האישור הזה הפעולה מתבצעת. בדמו שום דבר לא נשלח לרשת.","Здесь подтверждают выбор с телефона: ответ, лайк, удаление или пропуск. Действие выполняется только после этого. В демо ничего не уходит в сеть.")));
+  if(role!=="desk") head.append(el("p","soonline",L("אתם עכשיו בשלב הטלפון. לחצו «אישור במחשב» למעלה כדי לאשר ולבצע.","Сейчас включён шаг телефона. Нажмите «Одобрение на компьютере» сверху, чтобы одобрить и выполнить.")));
   main.append(head);
+  if(!list.length){
+    const e=el("div","empty");
+    e.append(el("strong",null,L("אין בחירות שמחכות","Нет выборов в ожидании")), document.createTextNode(L("בטלפון בוחרים תשובה, לייק, מחיקה או דילוג, והן מופיעות כאן.","На телефоне выбирают ответ, лайк, удаление или пропуск, и они появляются здесь.")));
+    main.append(e); return;
+  }
   list.forEach(it=>{
-    const c=el("article","card sendcard p-"+(it.platform||"x")), inn=el("div","in"); c.append(inn);
+    const c=el("article","card p-"+(it.platform||"x")), inn=el("div","in"); c.append(inn);
     const h=el("div","head"); const lg=el("div","logo"); lg.append(svg(LOGO[it.platform]||LOGO.email)); h.append(lg);
-    const ht=el("div","headtext"); const s=el("div","sentence"); const w=el("span","who",it.author||"—"); w.dir="auto"; s.append(w, document.createTextNode(isDM(it)?" · הודעה פרטית ב-"+(PNAME[it.platform]||""):" · תגובה ב-"+(PNAME[it.platform]||""))); ht.append(s);
-    if(it.where) ht.append(el("div","date",it.where_he||it.where)); h.append(ht); inn.append(h);
-    const q=el("div","bubble them"); q.dir="rtl"; q.append(el("small",null,"הוא כתב:"), document.createTextNode(it.text_he||it.text||"")); inn.append(q);
-    const r=el("div","bubble us sendtext"); r.dir="auto"; r.append(el("small",null,"התשובה של היוצר (לשליחה):"), document.createTextNode(it.replyText||"")); inn.append(r);
-    if(it.suggested_he && it.replyText===it.suggested){ const tl=el("div","trline"); tl.append(el("b",null,"בעברית: "), document.createTextNode(it.suggested_he)); inn.append(tl) }
+    const ht=el("div","headtext"); const s=el("div","sentence"); const w=el("span","who",it.author||"—"); w.dir="auto";
+    s.append(w, document.createTextNode(" · "+(PNAME[it.platform]||""))); ht.append(s); h.append(ht); inn.append(h);
+    const orig=el("div","bubble them"); orig.dir="auto"; orig.append(el("small",null,L("המקור","Оригинал")), document.createTextNode(it.text||"")); inn.append(orig);
+    if(it.text_he){ const tr=el("div","trline"); tr.dir="rtl"; tr.append(el("b",null,L("עברית: ","Иврит: ")), document.createTextNode(it.text_he)); inn.append(tr) }
+    const names=ACT_NAME();
+    const pick=el("p","pickline",L("נבחר בטלפון: ","Выбрано на телефоне: ")+(it.decision==="reply"?L("תשובה","ответ"):(names[it.decision]||"")));
+    inn.append(pick);
+    if(it.decision==="reply"&&it.replyText){ const r=el("div","bubble us"); r.dir="auto"; r.append(el("small",null,L("הטיוטה","Черновик")), document.createTextNode(it.replyText)); inn.append(r) }
     const acts=el("div","acts");
-    const cp=btn("reply",null,"📋 העתק את התשובה",async()=>{ try{ await navigator.clipboard.writeText(it.replyText||""); toast("✓ הועתק — עכשיו פותחים את השיחה ומדביקים") }catch(e){ const sel=getSelection(); const rg=document.createRange(); rg.selectNodeContents(r.lastChild); sel.removeAllRanges(); sel.addRange(rg); toast("סמנתי את הטקסט — לחץ העתק") } });
-    const op=el("a","btn","↗ פתח את השיחה"); op.href=it.url||"#"; op.target="_blank"; op.rel="noopener noreferrer"; op.style.textDecoration="none";
-    const ok=btn("like",null,"✓ נשלח",async()=>{ ok.disabled=true; try{ const res=await fetch("/api/sent",{method:"POST",credentials:"same-origin",headers:{"content-type":"application/json"},body:JSON.stringify({id:it.id})}); if(!res.ok) throw 0; it.status="done"; toast("✓ סומן כנשלח", async()=>{ await fetch("/api/sent",{method:"POST",credentials:"same-origin",headers:{"content-type":"application/json"},body:JSON.stringify({id:it.id,sent:false})}); it.status="new"; render() }); render() }catch(e){ ok.disabled=false; toast("לא הצלחתי לשמור, נסה שוב") } });
-    acts.append(cp,op,ok); inn.append(acts); main.append(c);
+    const ok=btn("reply",null,L("אשר ובצע","Одобрить и выполнить"),async()=>{
+      if(role!=="desk"){ toast(L("האישור השני נעשה במחשב","Второе одобрение делается на компьютере")); return }
+      ok.disabled=true;
+      try{
+        const res=await fetch("/api/approve",{method:"POST",credentials:"same-origin",headers:{"content-type":"application/json"},body:JSON.stringify({id:it.id})});
+        if(!res.ok) throw 0;
+        it.approval="approved"; it.approvedAt=new Date().toISOString(); it.status="done"; it.doneNote="בוצע אחרי אישור שני";
+        lastSavedAt=new Date();
+        try{ localStorage.setItem("inboxCache", JSON.stringify({items,club})) }catch(e){}
+        toast(L("✓ אושר ובוצע בדמו","✓ Одобрено и выполнено в демо")); render();
+      }catch(e){ ok.disabled=false; toast(L("השמירה נכשלה, נסה שוב","Не удалось сохранить, попробуйте ещё раз")) }
+    });
+    const back=btn("",null,L("החזר לבחירה בטלפון","Вернуть на телефон"),async()=>{
+      if(role!=="desk"){ toast(L("ההחזרה נעשית במחשב","Возврат делается на компьютере")); return }
+      back.disabled=true;
+      try{
+        const res=await fetch("/api/return",{method:"POST",credentials:"same-origin",headers:{"content-type":"application/json"},body:JSON.stringify({id:it.id})});
+        if(!res.ok) throw 0;
+        it.decision=null; it.decidedAt=null; it.replyText=null; it.approval=null; it.approvedAt=null; it.status="new"; it.doneNote=null;
+        lastSavedAt=new Date();
+        try{ localStorage.setItem("inboxCache", JSON.stringify({items,club})) }catch(e){}
+        toast(L("✓ הוחזר לבחירה בטלפון","✓ Возвращено на телефон")); render();
+      }catch(e){ back.disabled=false; toast(L("השמירה נכשלה, נסה שוב","Не удалось сохранить, попробуйте ещё раз")) }
+    });
+    if(role!=="desk"){ ok.disabled=true; back.disabled=true }
+    acts.append(ok,back); inn.append(acts); main.append(c);
+  });
+}
+function renderSoon(main){
+  const head=el("section","sendhead");
+  head.append(el("h2",null,L("בקרוב","Скоро")), el("p",null,L("היכולות כאן עדיין לא פועלות. זו מפת דרכים, לא המצב היום.","Этого ещё нет. Это дорожная карта, а не то, как ящик работает сегодня.")));
+  main.append(head);
+  const dict=el("div","preview");
+  [["спасибо","תודה"],["thank you","תודה"],["шабат шалом","שבת שלום"]].forEach(([from,to])=>{ const row=el("div"); row.dir="ltr"; row.style.unicodeBidi="isolate"; const a=el("bdi",null,from); a.dir="ltr"; const b=el("bdi",null,to); b.dir="rtl"; row.append(a, document.createTextNode(" → "), b); dict.append(row) });
+  const replies=el("div","preview");
+  [[L("תודה","Благодарность"),L("תודה על המילים החמות ❤️","Спасибо за тёплые слова ❤️")],[L("ברכה","Пожелание"),L("שבת שלום ❤️","Шабат шалом ❤️")],[L("שאלה","Вопрос"),L("שאלה טובה, נענה בשיעור הקרוב ❤️","Хороший вопрос, ответим в ближайшем уроке ❤️")],[L("ביקורת","Критика"),L("תודה שכתבת, נבדוק את זה ❤️","Спасибо, что написали, мы посмотрим ❤️")],[L("רגיש","Чувствительное"),L("קיבלנו, נחזור בפרטי ❤️","Получили, ответим лично ❤️")]].forEach(([k,v])=>{ const row=el("div"); row.append(el("b",null,k+" · "), document.createTextNode(v)); replies.append(row) });
+  const partial=el("div","preview");
+  const tags=el("div","tags");
+  [[ "YouTube", "ok", L("נאסף","собран") ],[ "TikTok", "part", L("חלקי","частично") ],[ "Instagram", "wait", L("ממתין","ждёт") ]].forEach(([name,cls,lab])=>{ const t=el("span","tag "+cls,name+" · "+lab); tags.append(t) });
+  partial.append(tags, el("p","snote",L("דוגמה למראה העתידי. זה לא המצב היום.","Пример будущего вида. Сегодня так не работает.")));
+  const blocks=[
+    [L("מילון ביטויים מובנה","Встроенный словарь фраз"), L("בזמן האיסוף, ביטויים נפוצים מרוסית ומאנגלית יתורגמו לעברית מתוך מילון שבנוי בתוך הכלי. בלי שירות חיצוני ובלי תשלום.","Во время сбора частые фразы с русского и английского будут переводиться на иврит словарём внутри инструмента. Без внешнего сервиса и без оплаты."), dict],
+    [L("סיווג אוטומטי ותשובות מוכנות","Автоклассификация и готовые ответы"), L("כל פריט יסווג: תודה, ברכה, שאלה, ביקורת או רגיש, עם תשובה מוכנה. בתשובות האלה משתמשים ב-❤️.","Каждый пункт получит класс: благодарность, пожелание, вопрос, критика или чувствительное, и готовый ответ. В этих ответах используется ❤️."), replies],
+    [L("מצב «מוחזק»","Состояние «удержано»"), L("אפשר יהיה להחזיק פריט כך שהפעולה שנבחרה לא תבוצע.","Пункт можно будет удержать, и выбранное действие не выполнится."), null],
+    [L("מספרי הערוץ בכל איסוף","Числа канала при каждом сборе"), L("מספרי הערוץ יתעדכנו אוטומטית בכל איסוף, ולא יישארו תמונת מצב ידנית.","Числа канала будут обновляться автоматически при каждом сборе, а не оставаться ручным снимком."), null],
+    [L("סטטוס איסוף לכל רשת","Статус сбора по каждой сети"), L("לכל רשת יהיה סטטוס. «חלקי» אומר שרק חלק מהרשתות נאספו באותו סבב.","У каждой сети будет статус. «Частично» значит, что в этом обходе собрана только часть сетей."), partial]
+  ];
+  blocks.forEach(([title,body,preview],i)=>{
+    const s=el("article","roaditem");
+    const h=el("h3"); h.append(document.createTextNode((i+1)+". "+title+" "), el("span","soonbadge",L("בקרוב","Скоро")));
+    s.append(h, el("p",null,body)); if(preview) s.append(preview); main.append(s);
   });
 }
 
@@ -951,6 +1085,7 @@ async function renderStats(main){
   const S=await getJSON("stats"); if(view!=="stats") return;
   main.replaceChildren();
   if(!S){ const e=el("div","empty"); e.append(el("strong",null,L("אין נתונים עדיין","Данных пока нет"))); main.append(e); return }
+  main.append(el("p","soonline",L("המספרים בדמו בדויים. הם לא מתעדכנים מאיסוף. עדכון אוטומטי של מספרי הערוץ בכל איסוף — בקרוב.","Цифры в демо вымышлены. Они не обновляются сбором. Автообновление чисел канала при каждом сборе — скоро.")));
   const hero=el("section","statHero");
   hero.append(el("div","lbl",L("סך הכול עוקבים בכל הערוצים","Всего подписчиков во всех каналах")), el("div","big",fmtN(S.total.followers)), el("div","upd",L("עודכן: ","Обновлено: ")+fmtDate(S.updated)));
   // follower bars: one glance shows where the audience is
@@ -979,7 +1114,7 @@ async function renderStats(main){
       const ft=el("div","sfoot"); ft.append(el("span",null,new Date(pts[0].d).toLocaleDateString(L("he-IL","ru-RU"),{day:"numeric",month:"short"})+" · "+fmtN(vs[0])), el("span",null,new Date(pts[pts.length-1].d).toLocaleDateString(L("he-IL","ru-RU"),{day:"numeric",month:"short"})+" · "+fmtN(vs[vs.length-1])));
       c.append(hd,box,ft); g.append(c);
     });
-    sec.append(g, el("p","snote",L("כל סבב סוף יום מוסיף נקודה לגרף.","Каждый вечерний обход добавляет точку на график."))); main.append(sec);
+    sec.append(g, el("p","snote",L("הנקודות בדמו בדויות. במוצר המספרים עדיין לא מתעדכנים לבד בכל איסוף.","Точки в демо вымышлены. В продукте числа ещё не обновляются сами при каждом сборе."))); main.append(sec);
   }
   const grid=el("div","pgrid");
   S.platforms.forEach(p=>{
@@ -1012,7 +1147,7 @@ async function renderDigest(main){
   if(!D){ const e=el("div","empty"); e.append(el("strong",null,L("הכרוניקה תופיע בסוף היום","Хроника появится в конце дня"))); main.append(e); return }
   const A=lang==="ru"?D.ru:D.he;
   const art=el("article","column");
-  const mast=el("div","cmast"); const mav=el("img","mava"); mav.src="rav.jpg"; mav.alt=""; mast.append(mav, el("div","mname",L("עיתון הערב של היוצר","Вечерняя почта автора")), el("div","mline",new Date(D.date+"T20:00:00").toLocaleDateString(L("he-IL","ru-RU"),{weekday:"long",day:"numeric",month:"long"})+" · "+L("גיליון מס' ","Выпуск № ")+(D.edition||1)));
+  const mast=el("div","cmast"); const mav=el("img","mava"); mav.src="rav.jpg"; mav.alt=""; mast.append(mav, el("div","mname",D.kind==="weekly"?L("הגיליון השבועי","Недельный лист"):L("הגיליון היומי","Дневной лист")), el("div","mline",new Date(D.date+"T12:00:00").toLocaleDateString(L("he-IL","ru-RU"),{weekday:"long",day:"numeric",month:"long"})+" · "+L("גיליון ","Выпуск ")+(D.edition||1)));
   art.append(mast);
   const words=A.body.join(" ").split(/\s+/).length;
   if(D.kind==="weekly") art.append(el("div","newbadge",L("🗓️ גיליון שבועי","🗓️ Недельный выпуск")));
@@ -1053,7 +1188,7 @@ async function renderDigest(main){
     idx.slice().sort((a,b)=>b.date.localeCompare(a.date)).forEach((e,i)=>{
       const r=el("button","arow"); r.type="button";
       const cur = digestDate ? digestDate===e.date : i===0; r.setAttribute("aria-current",String(cur));
-      r.append(el("span",null,T2(e.title)), el("small",null,L("מס' ","№ ")+e.edition+" · "+new Date(e.date+"T12:00:00").toLocaleDateString(L("he-IL","ru-RU"),{day:"numeric",month:"short"})));
+      r.append(el("span",null,(e.kind==="weekly"?L("שבועי · ","Неделя · "):L("יומי · ","День · "))+T2(e.title)), el("small",null,L("מס' ","№ ")+e.edition+" · "+new Date(e.date+"T12:00:00").toLocaleDateString(L("he-IL","ru-RU"),{day:"numeric",month:"short"})));
       r.onclick=()=>{ digestDate = i===0 ? null : e.date; render(); scrollTo({top:0}) };
       ar.append(r);
     });
@@ -1063,7 +1198,8 @@ async function renderDigest(main){
 
 /* ---------- data ---------- */
 async function load(){
-  if(loggedIn===false){ const e=el("div","empty"); e.append(el("strong",null,L("צריך את הקישור האישי","Нужна личная ссылка")), document.createTextNode(L("פותחים את הדף מהקישור שדוד שלח.","Откройте страницу по ссылке от Давида."))); $("main").replaceChildren(e); return }
+  if(loggedIn===false){ const e=el("div","empty"); e.append(el("strong",null,L("צריך את הקישור האישי","Нужна личная ссылка")), document.createTextNode(L("פותחים את הדף מהקישור האישי.","Откройте страницу по личной ссылке."))); $("main").replaceChildren(e); return }
+  if(!collection) collection=await getJSON("collection");
   if(!items.length){ try{ const c=JSON.parse(localStorage.getItem("inboxCache")||"null"); if(c&&c.items){ items=c.items; club=c.club; if(!load.done){ load.done=true; if(!items.some(it=>isDM(it)&&it.flag!=="hostile"&&bucket(it)==="open")) sec="comments" } render() } }catch(e){} }
   try{
     const r=await fetch("/api/items",{cache:"no-store",credentials:"same-origin"});
@@ -1081,11 +1217,12 @@ async function decide(it, decision, replyText, quiet){
   try{
     const r=await fetch("/api/decide",{method:"POST",credentials:"same-origin",headers:{"content-type":"application/json"},body:JSON.stringify({id:it.id,decision,replyText})});
     if(!r.ok) throw new Error(r.status);
-    it.decision=decision; if(decision==="reply"||decision==="later") it.replyText=replyText??null; delete drafts[it.id]; saveDraftsLocal();
+    it.decision=decision; it.approval=null; it.approvedAt=null; if(decision==="reply"||decision==="later") it.replyText=replyText??null; else it.replyText=null; if(!decision){ it.status="new"; it.doneNote=null } delete drafts[it.id]; saveDraftsLocal();
     lastSavedAt=new Date();
     try{ localStorage.setItem("inboxCache", JSON.stringify({items,club})) }catch(e){}
     if(!quiet){
-      const msg=decision===null?L("בוטל","Отменено"):decision==="later"?L("✓ נשמר לאחר כך","✓ Сохранено на потом"):decision==="skip"?L("✓ נשמר: דילוג","✓ Сохранено: пропустить"):decision==="delete"?L("✓ נשמר: למחיקה","✓ Сохранено: удалить"):decision==="like"?L("✓ נשמר: לייק. דוד יבצע","✓ Сохранено: «Нравится». Давид выполнит"):L("✓ נשמר. דוד ישלח","✓ Сохранено. Давид отправит");
+      const picked={reply:L("תשובה","ответ"),like:L("לייק","лайк"),delete:L("מחיקה","удаление"),skip:L("דילוג","пропуск")};
+      const msg=decision===null?L("בוטל","Отменено"):decision==="later"?L("✓ נשמר לאחר כך","✓ Сохранено на потом"):L("✓ נבחר בטלפון: ","✓ Выбрано на телефоне: ")+(picked[decision]||"")+L(". ממתין לאישור שני, בלי ביצוע.",". Ждёт второго одобрения, без выполнения.");
       toast(msg, decision===null?null:()=>decide(it, prev.decision, prev.replyText));
     }
   }catch(e){ toast(L("השמירה נכשלה, כדאי לנסות שוב","Не удалось сохранить, попробуйте ещё раз")) }
@@ -1098,6 +1235,8 @@ $("sizeBtn").onclick=()=>{big=!big; document.documentElement.classList.toggle("b
 $("sizeBtn").textContent=big?"A−":"A+";
 $("langBtn").onclick=()=>{lang=lang==="ru"?"he":"ru"; try{sessionStorage.setItem("inboxLangSession",lang)}catch(e){} applyLang(); render(); document.querySelector(".afileov")?.remove(); const ov=document.querySelector(".edition"); if(ov){ ov.remove(); showEdition(true) } };
 $("helpBtn").onclick=()=>{helpSeen=false; view="open"; render(); scrollTo({top:0})};
+$("rolePhone").onclick=()=>setRole("phone");
+$("roleDesk").onclick=()=>setRole("desk");
 
 /* finger swipe between messages in one-at-a-time mode (not while typing or pressing buttons) */
 (function(){
@@ -1119,7 +1258,7 @@ $("helpBtn").onclick=()=>{helpSeen=false; view="open"; render(); scrollTo({top:0
 
 /* side tab "daily edition": always visible, red dot while today's edition is unread */
 async function updateSideTab(){
-  $("sideTxt").textContent=L("📰 הגיליון היומי","📰 Выпуск дня");
+  $("sideTxt").textContent=L("📰 גיליון יומי","📰 Дневной лист");
   $("sideTab").setAttribute("aria-pressed",String(view==="digest"));
   const D=await getJSON("digest"); let seen=null; try{ seen=localStorage.getItem("inboxEditionSeen") }catch(e){}
   $("sideDot").hidden = !(D && D.date && seen!==D.date);
@@ -1134,9 +1273,9 @@ async function showEdition(force){
   const A=lang==="ru"?D.ru:D.he;
   const ov=el("div","edition"); ov.setAttribute("role","dialog"); ov.setAttribute("aria-modal","true");
   const paper=el("div","paper");
-  const mast=el("div","mast"); const mav=el("img","mava"); mav.src="rav.jpg"; mav.alt=""; mast.append(mav, el("div","mname",L("עיתון הערב של היוצר","Вечерняя почта автора")), el("div","mline",new Date(D.date+"T20:00:00").toLocaleDateString(L("he-IL","ru-RU"),{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" · "+L("גיליון מס' ","Выпуск № ")+(D.edition||1)));
+  const mast=el("div","mast"); const mav=el("img","mava"); mav.src="rav.jpg"; mav.alt=""; mast.append(mav, el("div","mname",D.kind==="weekly"?L("הגיליון השבועי","Недельный лист"):L("הגיליון היומי","Дневной лист")), el("div","mline",new Date(D.date+"T12:00:00").toLocaleDateString(L("he-IL","ru-RU"),{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" · "+L("גיליון ","Выпуск ")+(D.edition||1)));
   paper.append(mast);
-  const badge=el("div","newbadge",D.kind==="weekly"?L("🗓️ הגיע הגיליון השבועי","🗓️ Пришёл недельный выпуск"):L("✉️ הגיע גיליון חדש","✉️ Пришёл новый выпуск")); paper.append(badge);
+  const badge=el("div","newbadge",D.kind==="weekly"?L("הגיע הגיליון השבועי","Пришёл недельный лист"):L("הגיע הגיליון היומי","Пришёл дневной лист")); paper.append(badge);
   paper.append(el("h2","etitle",A.title));
   if(A.teaser) paper.append(el("p","eteaser",A.teaser));
   if(D.numbers&&D.numbers.length){ const g=el("div","enums"); D.numbers.forEach(n=>{ const c=el("div","enum"); c.append(el("b",null,n.val), el("span",null,T2(n))); g.append(c) }); paper.append(g) }
@@ -1151,7 +1290,7 @@ async function showEdition(force){
   read.focus();
 }
 /* self-update: if a newer version of the page was published, reload once (phones and home-screen apps keep old copies) */
-const PAGE_VERSION="2026-11-05c";
+const PAGE_VERSION="2026-11-22a";
 async function checkVersion(){
   try{
     const r=await fetch("version.json",{cache:"no-store"}); if(!r.ok) return;

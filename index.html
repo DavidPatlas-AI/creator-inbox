@@ -941,7 +941,7 @@ function card(it){
     const st=el("div","status "+(b==="done"?"done":it.decision==="delete"?"del":"wait"));
     const line=b==="done"
       ? L("בוצע אחרי אישור שני: ","Выполнено после второго одобрения: ")+what+(it.doneNote?" ("+it.doneNote+")":"")
-      : L("נבחר בטלפון: ","Выбрано на телефоне: ")+what+L(". ממתין לאישור במחשב. לא בוצע."," Ждёт одобрения на компьютере. Не выполнено.");
+      : L("נבחר בטלפון: ","Выбрано на телефоне: ")+what+L(". ממתין לאישור במחשב. לא בוצע.",". Ждёт одобрения на компьютере. Не выполнено.");
     st.append(el("span",null,line));
     if(b==="review"||b==="wait"){const u=el("button","undo",L("ביטול הבחירה","Отменить выбор")); u.onclick=()=>decide(it,null); st.append(u)}
     inn.append(st);
@@ -1222,7 +1222,7 @@ async function decide(it, decision, replyText, quiet){
     try{ localStorage.setItem("inboxCache", JSON.stringify({items,club})) }catch(e){}
     if(!quiet){
       const picked={reply:L("תשובה","ответ"),like:L("לייק","лайк"),delete:L("מחיקה","удаление"),skip:L("דילוג","пропуск")};
-      const msg=decision===null?L("בוטל","Отменено"):decision==="later"?L("✓ נשמר לאחר כך","✓ Сохранено на потом"):L("✓ נבחר בטלפון: ","✓ Выбрано на телефоне: ")+(picked[decision]||"")+L(". ממתין לאישור שני, בלי ביצוע."," Ждёт второго одобрения, без выполнения.");
+      const msg=decision===null?L("בוטל","Отменено"):decision==="later"?L("✓ נשמר לאחר כך","✓ Сохранено на потом"):L("✓ נבחר בטלפון: ","✓ Выбрано на телефоне: ")+(picked[decision]||"")+L(". ממתין לאישור שני, בלי ביצוע.",". Ждёт второго одобрения, без выполнения.");
       toast(msg, decision===null?null:()=>decide(it, prev.decision, prev.replyText));
     }
   }catch(e){ toast(L("השמירה נכשלה, כדאי לנסות שוב","Не удалось сохранить, попробуйте ещё раз")) }

@@ -1,7 +1,7 @@
 /* Demo mode for the creator inbox: a fake /api/* backed by localStorage, seeded with invented comments.
    Nothing here is real: every name, message and number is made up for the demo. */
 (function(){
-  const KEY="inboxDemoDb2", H=3600e3;
+  const KEY="inboxDemoDb3", H=3600e3;
   const ago=h=>new Date(Date.now()-h*H).toISOString();
   // [hoursAgo, platform, kind, source, cat, author, avatar, text ru, text he, where ru, where he, suggested ru, suggested he, extra]
   const SEED=[
@@ -26,7 +26,7 @@
     [70,"instagram","dm","","R","tamar.b","t1","Рав, можно задать вопрос о свадьбе дочери? Это долгий разговор.","רב, אפשר לשאול שאלה על החתונה של הבת שלי? זו שיחה ארוכה.","","","Мазаль тов! Конечно, давайте созвонимся на неделе.","מזל טוב! בוודאי, בואי נדבר בטלפון במהלך השבוע.",{decision:"later",decidedAt:ago(60),replyText:""}],
     [100,"youtube","comment","video","T","Ефим","e1","Спасибо, теперь всё понятно!","תודה, עכשיו הכול ברור!","Урок: Мудрость отцов","שיעור: חכמת האבות","","",{decision:"reply",decidedAt:ago(95),replyText:"Рад помочь, Ефим!",approval:"approved",approvedAt:ago(90),status:"done",doneNote:"בוצע אחרי אישור שני"}],
     [4,"telegram","comment","video","Q","Лиора","q1","Когда следующий урок в прямом эфире?","מתי השיעור הבא בשידור חי?","Пост: Расписание уроков","פוסט: לוח השיעורים","В четверг в 20:00 по Израилю. Ждём вас!","ביום חמישי ב-20:00 שעון ישראל. מחכים לך!"],
-    [8,"youtube","comment","video","T","mira.k","a1","Thank you, I watch the short lessons on the way to work.","תודה, אני צופה בשיעורים הקצרים בדרך לעבודה.","Урок: Сила утренней молитвы","שיעור: הכוח של תפילת הבוקר","Thank you, Mira. Glad the short lessons keep you company.","תודה, מירה. שמח שהשיעורים הקצרים מלווים אותך."],
+    [8,"youtube","comment","video","T","mira.k","m2","Thank you, I watch the short lessons on the way to work.","תודה, אני צופה בשיעורים הקצרים בדרך לעבודה.","Урок: Сила утренней молитвы","שיעור: הכוח של תפילת הבוקר","Thank you, Mira. Glad the short lessons keep you company.","תודה, מירה. שמח שהשיעורים הקצרים מלווים אותך."],
     [18,"youtube","comment","video","Q","Олег","h1","Почему евреи так много спорят?","למה יהודים מתווכחים כל כך הרבה?","Урок: Спор ради Небес","שיעור: מחלוקת לשם שמיים","Потому что спор ради истины — часть учёбы. Об этом будет целый урок!","כי ויכוח לשם האמת הוא חלק מהלימוד. יהיה על זה שיעור שלם!",{idea:true,ideaAt:ago(17)}],
   ];
   function seed(){
@@ -62,7 +62,7 @@
   addEventListener("DOMContentLoaded",()=>{
     const b=document.createElement("div");b.className="demo-ribbon";b.setAttribute("dir","rtl");
     b.innerHTML='<span>דמו · כל השמות וההודעות בדויים · Демо: данные вымышлены</span><button type="button">איפוס</button>';
-    b.querySelector("button").onclick=()=>{try{localStorage.removeItem(KEY);localStorage.removeItem("inboxDemoDb");localStorage.removeItem("inboxCache");localStorage.removeItem("inboxHelp2");sessionStorage.removeItem("inboxRole")}catch(e){}location.reload()};
+    b.querySelector("button").onclick=()=>{try{localStorage.removeItem(KEY);localStorage.removeItem("inboxDemoDb");localStorage.removeItem("inboxDemoDb2");localStorage.removeItem("inboxCache");localStorage.removeItem("inboxHelp2");sessionStorage.removeItem("inboxRole")}catch(e){}location.reload()};
     document.body.append(b);
   });
 })();
